@@ -12,8 +12,8 @@ using QrudNTier.DAL.Context;
 namespace QrudNTier.DAL.Migrations
 {
     [DbContext(typeof(QrudNTierDBContext))]
-    [Migration("20260103074443_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20260103144328_Change Database Server-Home")]
+    partial class ChangeDatabaseServerHome
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
