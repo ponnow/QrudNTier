@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using QrudNTier.DAL;
+using QrudNTier.DAL.Context;
 
 #nullable disable
 
 namespace QrudNTier.DAL.Migrations
 {
     [DbContext(typeof(QrudNTierDBContext))]
-    [Migration("20251231163418_initial migration")]
-    partial class initialmigration
+    [Migration("20260103074443_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

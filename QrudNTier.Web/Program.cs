@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using QrudNTier.DAL;
+using QrudNTier.DAL.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
