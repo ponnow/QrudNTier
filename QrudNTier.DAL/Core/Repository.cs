@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 namespace QrudNTier.DAL.Core;
 
-public class Repository<TEntity, Tkey, TContext> : IRepository<TEntity, Tkey, TContext>
+public abstract class Repository<TEntity, Tkey, TContext> : IRepository<TEntity, Tkey, TContext>
      where TEntity : class
      where TContext : DbContext
 {
@@ -12,7 +12,7 @@ public class Repository<TEntity, Tkey, TContext> : IRepository<TEntity, Tkey, TC
         _context = context;
         _dbSet = _context.Set<TEntity>();
     }
-    public async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
     }
