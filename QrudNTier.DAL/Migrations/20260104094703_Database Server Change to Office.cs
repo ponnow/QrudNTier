@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QrudNTier.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeDatabaseServerHome : Migration
+    public partial class DatabaseServerChangetoOffice : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

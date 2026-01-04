@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QrudNTier.DAL.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace QrudNTier.DAL.Core;
 public class UnitOfWork : IUnitOfWork
 {
     private bool _disposed;
-    protected readonly DbContext _context;
+    protected readonly QrudNTierDBContext _context;
 
-    public UnitOfWork(DbContext context)
+    public UnitOfWork(QrudNTierDBContext context)
     {
         _context = context;
     }
