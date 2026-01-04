@@ -1,13 +1,15 @@
 ﻿
+using QrudNTier.BLL.Model;
 using QrudNTier.Model;
 
 namespace QrudNTier.BLL.Interfaces;
 
 public interface IProductService
 {
-    Task<IList<Product>> GetAllAsync();
-    Task<Product?> GetByIdAsync(int id);
-    Task AddAsync(Product product);
-    Task UpdateAsync(Product product);
-    Task DeleteAsync(int id);
+    //Task<Result<IList<Product>>> GetAllAsync();
+    Task <IList<Product>> GetAllAsync();
+    Task<Result<Product>> GetByIdAsync(int id);
+    Task<Result<int>> AddAsync(Product product);
+    Task<Result<int>> UpdateAsync(Product product);
+    Task<Result<bool>> DeleteAsync(int id);
 }

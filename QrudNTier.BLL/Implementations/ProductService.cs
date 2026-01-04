@@ -1,5 +1,6 @@
 ﻿
 using QrudNTier.BLL.Interfaces;
+using QrudNTier.BLL.Model;
 using QrudNTier.DAL.Interfaces;
 using QrudNTier.Model;
 
@@ -12,42 +13,86 @@ public class ProductService : IProductService
     {
         _productUnitOfWork = productUnitOfWork;
     }
-    public async Task AddAsync(Product product)
+    public async Task<Result<int>> AddAsync(Product product)
     {
+        if ( product is null)
+        {
+            return Result<int>.FailureResult("Product cannot be Blank!");
+        }
         try 
         {
             await _productUnitOfWork.ProductRepository.AddAsync(product);
-            await _productUnitOfWork.SaveChangesAsync();
+            var saved = await _productUnitOfWork.SaveChangesAsync();
+            if(!saved)
+            {
+                return Result<int>.FailureResult("Failed to add Product!");
+            }
+                return Result<int>.SuccessResult(product.Id);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw;
+            return Result<int>.FailureResult("An error occurred while adding the Product.");
         }
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<Result<bool>> DeleteAsync(int id)
     {
         var product = await _productUnitOfWork.ProductRepository.GetByIdAsync(id);
-        if(product is not null)
+        if (product is null)
         {
-            await _productUnitOfWork.ProductRepository.DeleteAsync(product);
+            return Result<bool>.FailureResult("Product not found!");
         }
+        await _productUnitOfWork.ProductRepository.DeleteAsync(product);
+        var saved = await _productUnitOfWork.SaveChangesAsync();
+        if (!saved)
+        {
+            return Result<bool>.FailureResult("Failed to delete Product!");
+        }
+        return Result<bool>.SuccessResult(true);
     }
 
+    //public async Task<Result<IList<Product>>> GetAllAsync()
+    //{
+    //    var products = await _productUnitOfWork.ProductRepository.GetAsync(x => x,null, x => x.OrderByDescending(x => x.Id),null,true);
+    //    //return products; 44:48 PM
+    //    //return products.ContinueWith(t => (IList<Product>)t.Result);
+    //    return Result<IList<Product>>.SuccessResult(products);
+    //}
     public Task<IList<Product>> GetAllAsync()
     {
-        var products =  _productUnitOfWork.ProductRepository.GetAsync(x => x,null, x => x.OrderByDescending(x => x.Id),null,true);
+        var products = _productUnitOfWork.ProductRepository.GetAsync(x => x, null, x => x.OrderByDescending(x => x.Id), null, true);
         //return products; 44:48 PM
         return products.ContinueWith(t => (IList<Product>)t.Result);
     }
 
-    public Task<Product?> GetByIdAsync(int id)
+    public async Task<Result<Product>> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var product = await _productUnitOfWork.ProductRepository.GetByIdAsync(id);
+        if (product is null)
+        {
+            return Result<Product>.FailureResult("Product not found!");
+        }
+        return Result<Product>.SuccessResult(product);
     }
 
-    public Task UpdateAsync(Product product)
+    public async Task<Result<int>> UpdateAsync(Product product)
     {
-        throw new NotImplementedException();
+        if (product is null)
+        {
+            return Result<int>.FailureResult("Product cannot be Blank!");
+        }
+        var existingProduct = await _productUnitOfWork.ProductRepository.GetByIdAsync(product.Id);
+        if (existingProduct is null)
+        {
+            return Result<int>.FailureResult($"Product {product.Id} not found!");
+        }
+        var Existproduct = await _productUnitOfWork.ProductRepository.GetByIdAsync(product.Id);
+        await _productUnitOfWork.ProductRepository.UpdateAsync(product);
+        var saved = await _productUnitOfWork.SaveChangesAsync();
+        if (!saved)
+        {
+            return Result<int>.FailureResult("Failed to update Product!");
+        }
+        return Result<int>.SuccessResult(product.Id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QrudNTier.BLL.Implementations;
 using QrudNTier.BLL.Interfaces;
+using QrudNTier.Model;
 
 namespace QrudNTier.Web.Controllers
 {
@@ -11,17 +12,48 @@ namespace QrudNTier.Web.Controllers
         {
             _productService = productService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var product = new Model.Product
-            {
-                Name = "Sample Product",
-                Description = "This is a sample product.",
-                Price = 9.99M
-            };
+            var products = await _productService.GetAllAsync();
+            return View(products);
+        }
 
-            _productService.AddAsync(product);
+        public IActionResult Create()
+        {
             return View();
+        }
+        [HttpPost]
+
+        public async Task<IActionResult> Create(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                await _productService.AddAsync(product);
+                return RedirectToAction("Index");
+            }
+            return View(product);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _productService.DeleteAsync(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                await _productService.UpdateAsync(product);
+                return RedirectToAction("Index");
+            }
+            return View(product);
+
         }
     }
 }
