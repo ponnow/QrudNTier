@@ -15,7 +15,7 @@ namespace QrudNTier.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _productService.GetAllAsync();
-            return View(products);
+            return View(products.Data);
         }
 
         public IActionResult Create()
@@ -33,11 +33,16 @@ namespace QrudNTier.Web.Controllers
             }
             return View(product);
         }
-
         public async Task<IActionResult> Delete(int id)
         {
             await _productService.DeleteAsync(id);
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productService.GetByIdAsync(id);
+            return View(product.Data);
         }
 
         public IActionResult Edit()

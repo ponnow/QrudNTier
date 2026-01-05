@@ -24,8 +24,8 @@ public class Result<T>
         return new Result<T>(false, default, error);
     }
 
-    internal static Result<IList<Product>> SuccessResult(IList products)
+    public static Result<IList<Product>> SuccessResult(IList products)
     {
-        throw new NotImplementedException();
+        return new Result<IList<Product>>(true, (IList<Product>)products, string.Empty);
     }
 }
