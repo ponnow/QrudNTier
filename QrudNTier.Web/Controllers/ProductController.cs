@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QrudNTier.BLL.Implementations;
 using QrudNTier.BLL.Interfaces;
 using QrudNTier.Model;
@@ -45,20 +46,29 @@ namespace QrudNTier.Web.Controllers
             return View(product.Data);
         }
 
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var result = await _productService.GetByIdAsync(id);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return View(result.Data);
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product product)
         {
             if (ModelState.IsValid)
             {
                 await _productService.UpdateAsync(product);
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            return View(product);
 
+            return View(product);
         }
     }
 }
